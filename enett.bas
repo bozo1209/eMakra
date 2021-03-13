@@ -6,7 +6,7 @@ Dim daneDoSortowania As Variant
 
 'wpisywanie porównania z ostatni¹ wartoœci¹
 
-Function znajdowanieWczorajszejDaty()
+Private Function znajdowanieWczorajszejDaty()
     Dim wczorajszaData As Date
     Dim i, j As Integer
     wczorajszaData = Date - 1
@@ -22,7 +22,7 @@ Function znajdowanieWczorajszejDaty()
     znajdowanieWczorajszejDaty = j
 End Function
 
-Sub uzupelnianieCheka()
+Private Sub uzupelnianieCheka()
     Dim i As Integer
     i = znajdowanieWczorajszejDaty
     
@@ -58,7 +58,7 @@ Private Sub sortowanieDoNajnowszej(wb As Workbook)
         Next j
     Next i
 
-    workbookName = Left(wb.Name, InStr(1, wb.Name, ".", vbTextCompare) - 1)
+    workbookName = UCase(Left(wb.Name, InStr(1, wb.Name, ".", vbTextCompare) - 1))
     With Workbooks(nazwaExcelaDocelowego)
         Select Case workbookName
             Case "EUR"
@@ -95,14 +95,33 @@ Private Sub wklejanie(nazwaArkusza As String)
         If (.Range("a1").Value <> "" And .Range("a2").Value <> "") Then
             .Range("a" & .Range("a1").End(xlDown).Row + 1 & ":i" & .Range("a1").End(xlDown).Row + UBound(daneDoSortowania, 1)) = daneDoSortowania
         Else
-            .Range("a2:i" & UBound(daneDoSortowania, 1)) = daneDoSortowania
+            .Range("a2:i" & UBound(daneDoSortowania, 1) + 1) = daneDoSortowania
         End If
     End With
 End Sub
 
+
+Private Sub wylacz()
+    Application.ScreenUpdating = False
+    Application.Calculation = xlCalculationManual
+    Application.EnableEvents = False
+End Sub
+
+
+Private Sub wlacz()
+    Application.ScreenUpdating = True
+    Application.Calculation = xlCalculationAutomatic
+    Application.EnableEvents = True
+End Sub
+
+
 Sub wklejenieDoEnetta()
     Dim wb As Workbook
-    nazwaExcelaDocelowego = "eNett 02.2021 — kopia.xlsb"
+    nazwaExcelaDocelowego = "eNett 03.2021 — kopia.xlsb"
+    
+    On Error GoTo error_handler
+    
+    Call wylacz
     
     For Each wb In Workbooks
         If wb.Name <> nazwaExcelaDocelowego And wb.Name <> "PERSONAL.XLSB" Then
@@ -111,5 +130,26 @@ Sub wklejenieDoEnetta()
         End If
     Next wb
     Call uzupelnianieCheka
+    Call wlacz
+    Exit Sub
+error_handler:
+    If Err.Number = 1004 Then
+        MsgBox "SprawdŸ czy wszystkie pliki s¹ w trybie edycji i spróbuj ponownie." & vbCrLf _
+            & "Miej na uwadze, ¿e czêœæ kodu mog³a siê wykonaæ. Najlepiej w takim przypadku wyjdŸ z arkusza bez zapisywania"
+    Else
+        MsgBox "Wyst¹pi³ b³¹d nr: " & Err.Number & " o opisie: " & Err.Description
+    End If
+    
+    Call wlacz
 End Sub
 
+
+Private Sub testRunTime()
+    Dim startTime, endTime As Double
+    startTime = Timer
+    
+    Call wklejenieDoEnetta
+    
+    endTime = Timer - startTime
+    Debug.Print "time: " & endTime
+End Sub
