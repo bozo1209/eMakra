@@ -44,11 +44,17 @@ Private Sub sortowanieDoNajnowszej(wb As Workbook)
     
     With wb.Sheets(1)
         If (.Range("a2").Value <> "" And .Range("a3").Value <> "") Then
-            daneDoSortowania = .Range("a2:i" & .Range("a2").End(xlDown).Row).Value
+            daneDoSortowania = .Range(.Cells(2, 1), .Cells(.Range("a1").End(xlDown).Row, .Range("a1").End(xlToRight).Column))
         ElseIf (.Range("a2").Value <> "") Then
-            daneDoSortowania = .Range("a2:i2").Value
+            daneDoSortowania = .Range(.Cells(2, 1), .Cells(2, .Range("a1").End(xlToRight).Column))
+        Else
+            daneDoSortowania = Empty
         End If
     End With
+    
+    If IsEmpty(daneDoSortowania) Then
+        Exit Sub
+    End If
     
     For i = 1 To (UBound(daneDoSortowania, 1) + 1) / 2
         For j = 1 To UBound(daneDoSortowania, 2)
@@ -90,12 +96,13 @@ Private Sub sortowanieDoNajnowszej(wb As Workbook)
     
 End Sub
 
+
 Private Sub wklejanie(nazwaArkusza As String)
     With Workbooks(nazwaExcelaDocelowego).Sheets(nazwaArkusza)
         If (.Range("a1").Value <> "" And .Range("a2").Value <> "") Then
-            .Range("a" & .Range("a1").End(xlDown).Row + 1 & ":i" & .Range("a1").End(xlDown).Row + UBound(daneDoSortowania, 1)) = daneDoSortowania
+            .Range(.Cells(.Range("a1").End(xlDown).Row + 1, 1), .Cells(.Range("a1").End(xlDown).Row + UBound(daneDoSortowania, 1), .Range("a1").End(xlToRight).Column)) = daneDoSortowania
         Else
-            .Range("a2:i" & UBound(daneDoSortowania, 1) + 1) = daneDoSortowania
+            .Range(.Cells(2, 1), .Cells(UBound(daneDoSortowania, 1) + 1, .Range("a1").End(xlToRight).Column)) = daneDoSortowania
         End If
     End With
 End Sub
@@ -117,7 +124,7 @@ End Sub
 
 Sub wklejenieDoEnetta()
     Dim wb As Workbook
-    nazwaExcelaDocelowego = "eNett 03.2021 — kopia.xlsb"
+    nazwaExcelaDocelowego = "eNett 04.2021.xlsb"
     
     On Error GoTo error_handler
     
