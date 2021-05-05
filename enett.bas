@@ -1,9 +1,12 @@
 Attribute VB_Name = "enett"
 Option Explicit
+Dim nazwaExcelaDocelowego As String
+Dim daneDoSortowania As Variant
+
 
 'wpisywanie porównania z ostatni¹ wartoœci¹
 
-Function znajdowanieWczorajszejDaty()
+Private Function znajdowanieWczorajszejDaty()
     Dim wczorajszaData As Date
     Dim i, j As Integer
     wczorajszaData = Date - 1
@@ -19,7 +22,7 @@ Function znajdowanieWczorajszejDaty()
     znajdowanieWczorajszejDaty = j
 End Function
 
-Sub uzupelnianieCheka()
+Private Sub uzupelnianieCheka()
     Dim i As Integer
     i = znajdowanieWczorajszejDaty
     
@@ -32,4 +35,128 @@ Sub uzupelnianieCheka()
     Sheets("HKD_VAN - GWTTP (Asia)").Range("p" & i).FormulaR1C1 = "=RC[-1]-'Activity_Ledger HKD'!R" & Sheets("Activity_Ledger HKD").Range("h1").End(xlDown).Row & "C8"
 End Sub
 
+'sortowanie od ostatniej daty do najnowszej
 
+Private Sub sortowanieDoNajnowszej(wb As Workbook)
+    Dim temp As Variant
+    Dim i, j As Integer
+    Dim workbookName As String
+    
+    With wb.Sheets(1)
+        If (.Range("a2").Value <> "" And .Range("a3").Value <> "") Then
+            daneDoSortowania = .Range(.Cells(2, 1), .Cells(.Range("a1").End(xlDown).Row, .Range("a1").End(xlToRight).Column))
+        ElseIf (.Range("a2").Value <> "") Then
+            daneDoSortowania = .Range(.Cells(2, 1), .Cells(2, .Range("a1").End(xlToRight).Column))
+        Else
+            daneDoSortowania = Empty
+        End If
+    End With
+    
+    If IsEmpty(daneDoSortowania) Then
+        Exit Sub
+    End If
+    
+    For i = 1 To (UBound(daneDoSortowania, 1) + 1) / 2
+        For j = 1 To UBound(daneDoSortowania, 2)
+            temp = daneDoSortowania(i, j)
+            daneDoSortowania(i, j) = daneDoSortowania(UBound(daneDoSortowania, 1) + 1 - i, j)
+            daneDoSortowania(UBound(daneDoSortowania, 1) + 1 - i, j) = temp
+        Next j
+    Next i
+
+    workbookName = UCase(Left(wb.Name, InStr(1, wb.Name, ".", vbTextCompare) - 1))
+    With Workbooks(nazwaExcelaDocelowego)
+        Select Case workbookName
+            Case "EUR"
+                Call wklejanie("Activity_Ledger EUR")
+                .Sheets("Activity_Ledger EUR").PivotTables("PivotTable4").PivotCache.Refresh
+            Case "GBP"
+                Call wklejanie("Activity_Ledger GBP")
+                .Sheets("Activity_Ledger GBP").PivotTables("PivotTable7").PivotCache.Refresh
+            Case "HKD"
+                Call wklejanie("Activity_Ledger HKD")
+                .Sheets("Activity_Ledger HKD").PivotTables("PivotTable3").PivotCache.Refresh
+            Case "HUF"
+                Call wklejanie("Activity_Ledger HUF")
+                .Sheets("Activity_Ledger HUF").PivotTables("PivotTable9").PivotCache.Refresh
+            Case "PLN"
+                Call wklejanie("Activity_Ledger PLN")
+                .Sheets("Activity_Ledger PLN").PivotTables("PivotTable8").PivotCache.Refresh
+            Case "RUB"
+                Call wklejanie("Activity_Ledger RUB")
+                .Sheets("Activity_Ledger RUB").PivotTables("PivotTable2").PivotCache.Refresh
+            Case "USD"
+                Call wklejanie("Activity_Ledger USD")
+                .Sheets("Activity_Ledger USD").PivotTables("PivotTable6").PivotCache.Refresh
+            Case "VAN"
+                Call wklejanie("VANS")
+                .Sheets("VAN_Pivot").PivotTables("PivotTable2").PivotCache.Refresh
+        End Select
+    End With
+    
+End Sub
+
+
+Private Sub wklejanie(nazwaArkusza As String)
+    With Workbooks(nazwaExcelaDocelowego).Sheets(nazwaArkusza)
+        If (.Range("a1").Value <> "" And .Range("a2").Value <> "") Then
+            .Range(.Cells(.Range("a1").End(xlDown).Row + 1, 1), .Cells(.Range("a1").End(xlDown).Row + UBound(daneDoSortowania, 1), .Range("a1").End(xlToRight).Column)) = daneDoSortowania
+        Else
+            .Range(.Cells(2, 1), .Cells(UBound(daneDoSortowania, 1) + 1, .Range("a1").End(xlToRight).Column)) = daneDoSortowania
+        End If
+    End With
+End Sub
+
+
+Private Sub wylacz()
+    Application.ScreenUpdating = False
+    Application.Calculation = xlCalculationManual
+    Application.EnableEvents = False
+End Sub
+
+
+Private Sub wlacz()
+    Application.ScreenUpdating = True
+    Application.Calculation = xlCalculationAutomatic
+    Application.EnableEvents = True
+End Sub
+
+
+Sub wklejenieDoEnetta()
+    Dim wb As Workbook
+    nazwaExcelaDocelowego = "eNett 05.2021.xlsb"
+    
+    On Error GoTo error_handler
+    
+    Call wylacz
+    
+    For Each wb In Workbooks
+        If wb.Name <> nazwaExcelaDocelowego And wb.Name <> "PERSONAL.XLSB" Then
+            Call sortowanieDoNajnowszej(wb)
+            wb.Close savechanges:=False
+        End If
+    Next wb
+    Call uzupelnianieCheka
+    Call wlacz
+    Exit Sub
+error_handler:
+    If Err.Number = 1004 Then
+        MsgBox "SprawdŸ czy wszystkie pliki s¹ w trybie edycji i spróbuj ponownie." & vbCrLf _
+            & "Miej na uwadze, ¿e czêœæ kodu mog³a siê wykonaæ. Najlepiej w takim przypadku wyjdŸ z arkusza bez zapisywania"
+    Else
+        MsgBox "Wyst¹pi³ b³¹d nr: " & Err.Number & " o opisie: " & Err.Description
+    End If
+    
+    Call wlacz
+End Sub
+
+
+Private Sub testRunTime()
+    Dim startTime, endTime As Double
+    startTime = Timer
+    
+    Call wklejenieDoEnetta
+    
+    endTime = Timer - startTime
+    Debug.Print "time: " & endTime
+End Sub
