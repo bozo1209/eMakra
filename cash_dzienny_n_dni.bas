@@ -22,7 +22,9 @@ Private Sub ileDni()
 End Sub
 
 Private Sub dataSub(dzien As Integer)
+
     data = Format(dzien & "-05-2021", "mm-dd-yyyy")
+
 End Sub
 
 
@@ -62,22 +64,27 @@ Private Sub dodawanie()
 End Sub
 
 Private Sub dodawanieDetale()
+
     Dim kolumny(3 To 210, 1 To 3) As Variant
+
     Dim i, j As Integer
     
     For j = 1 To 3
         For i = 3 To UBound(kolumny, 1)
+
             If (i = 3 Or i = 131 Or i = 152 Or i = 170 Or i = 185 Or i = 207) And j = 3 Then
                 kolumny(i, j) = data
             ElseIf i = 4 Or i = 132 Or i = 153 Or i = 171 Or i = 186 Or i = 208 Then
+
                 Select Case j
                     Case 1
-                        kolumny(i, j) = "Wartoœæ w walucie"
+                        kolumny(i, j) = "WartoÅ“Ã¦ w walucie"
                     Case 2
                         kolumny(i, j) = "kurs"
                     Case 3
                         kolumny(i, j) = "w PLN"
                 End Select
+
             ElseIf i = 124 Then
                 Select Case j
                     Case 1
@@ -86,33 +93,41 @@ Private Sub dodawanieDetale()
                         kolumny(i, j) = "=SUM(R[-119]C:R[-1]C)"
                 End Select
             ElseIf i = 147 Then
+
                 Select Case j
                     Case 1
                         kolumny(i, j) = "=SUM(R[-14]C:R[-1]C)"
                     Case 3
                         kolumny(i, j) = "=SUM(R[-14]C:R[-1]C)"
                 End Select
+
             ElseIf i = 160 Then
+
                 Select Case j
                     Case 1
                         kolumny(i, j) = "=SUM(R[-6]C:R[-1]C)"
                     Case 3
                         kolumny(i, j) = "=SUM(R[-6]C:R[-1]C)"
                 End Select
+
             ElseIf i = 179 Then
+
                 Select Case j
                     Case 1
                         kolumny(i, j) = "=SUM(R[-7]C:R[-1]C)"
                     Case 3
                         kolumny(i, j) = "=SUM(R[-7]C:R[-1]C)"
                 End Select
+
             ElseIf i = 195 Then
+
                 Select Case j
                     Case 1
                         kolumny(i, j) = "=SUM(R[-8]C:R[-1]C)"
                     Case 3
                         kolumny(i, j) = "=SUM(R[-8]C:R[-1]C)"
                 End Select
+
             ElseIf i = 165 And j = 3 Then
                 kolumny(i, j) = "=R[-41]C+R[-18]C+R[-5]C"
             ElseIf i = 198 And j = 3 Then
@@ -122,6 +137,7 @@ Private Sub dodawanieDetale()
                     Case 2
                         Select Case i
                             Case Is = 34, Is = 50, Is = 70, Is = 85
+
                                 kolumny(i, j) = "=IFERROR(HLOOKUP(RC5,kursy!R1:R400,MATCH(R3C[-2],kursy!R1C1:R400C1,1),0),1)/100"
                             Case Else
                                 kolumny(i, j) = "=IFERROR(HLOOKUP(RC5,kursy!R1:R400,MATCH(R3C[-2],kursy!R1C1:R400C1,1),0),1)"
@@ -129,25 +145,31 @@ Private Sub dodawanieDetale()
                     Case 3
                         kolumny(i, j) = "=RC[-2]*RC[-1]"
                 End Select
+
             ElseIf i > 132 And i < 147 Then
+
                 Select Case j
                     Case 2
                         kolumny(i, j) = "=IFERROR(HLOOKUP(RC5,kursy!R1:R400,MATCH(R3C[-2],kursy!R1C1:R400C1,1),0),1)"
                     Case 3
                         kolumny(i, j) = "=RC[-2]*RC[-1]"
                 End Select
+
             ElseIf i > 153 And i < 160 Then
+
                 Select Case j
                     Case 2
                         kolumny(i, j) = "=IFERROR(HLOOKUP(RC5,kursy!R1:R400,MATCH(R3C[-2],kursy!R1C1:R400C1,1),0),1)"
                     Case 3
                         kolumny(i, j) = "=RC[-2]*RC[-1]"
                 End Select
+
             ElseIf i > 171 And i < 179 Then
                 Select Case j
                     Case 2
                         Select Case i
                             Case 176
+
                                 kolumny(i, j) = "=IFERROR(HLOOKUP(RC5,kursy!R1:R400,MATCH(R3C[-2],kursy!R1C1:R400C1,1),0),1)/100"
                             Case Else
                                 kolumny(i, j) = "=IFERROR(HLOOKUP(RC5,kursy!R1:R400,MATCH(R3C[-2],kursy!R1C1:R400C1,1),0),1)"
@@ -155,11 +177,13 @@ Private Sub dodawanieDetale()
                     Case 3
                         kolumny(i, j) = "=RC[-2]*RC[-1]"
                 End Select
+
             ElseIf i > 186 And i < 195 Then
                 Select Case j
                     Case 2
                         Select Case i
                             Case 191
+
                                 kolumny(i, j) = "=IFERROR(HLOOKUP(RC5,kursy!R1:R400,MATCH(R3C[-2],kursy!R1C1:R400C1,1),0),1)/100"
                             Case Else
                                 kolumny(i, j) = "=IFERROR(HLOOKUP(RC5,kursy!R1:R400,MATCH(R3C[-2],kursy!R1C1:R400C1,1),0),1)"
@@ -167,7 +191,9 @@ Private Sub dodawanieDetale()
                     Case 3
                         kolumny(i, j) = "=RC[-2]*RC[-1]"
                 End Select
+
             ElseIf i > 208 Then
+
                 Select Case j
                     Case 2
                         kolumny(i, j) = "=IFERROR(HLOOKUP(RC5,kursy!R1:R400,MATCH(R3C[-2],kursy!R1C1:R400C1,1),0),1)"
@@ -193,7 +219,7 @@ Private Sub dodawanieDostepnyKredytIZalegle()
             ElseIf i = 7 Or i = 18 Then
                 Select Case j
                     Case 1
-                        kolumny(i, j) = "Wartoœæ w walucie"
+                        kolumny(i, j) = "WartoÅ“Ã¦ w walucie"
                     Case 2
                         kolumny(i, j) = "kurs"
                     Case 3
@@ -216,7 +242,7 @@ Private Sub dodawanieDostepnyKredytIZalegle()
             End If
         Next i
     Next j
-    With Sheets("dostêpny kredyt i zaleg³e p³")
+    With Sheets("dostÃªpny kredyt i zalegÂ³e pÂ³")
         .Range(.Cells(6, .Range("F7").End(xlToRight).Column + 1), .Cells(UBound(kolumny, 1), .Range("F7").End(xlToRight).Column + 3)).FormulaR1C1 = kolumny
     End With
 End Sub
@@ -291,7 +317,9 @@ Private Sub podsumowanieWWalutach()
     Dim i, j, k, dzien As Integer
     
     Dim kolumny As Variant
+
     ReDim kolumny(4 To 96, 1 To ileDnii)
+
     
     k = Sheets("detale").Range("F4").End(xlToRight).Column - 2
     For j = 1 To ileDnii
@@ -299,6 +327,7 @@ Private Sub podsumowanieWWalutach()
         dzien = j
         Call dataSub(dzien)
         For i = 4 To UBound(kolumny, 1)
+
             If i = 4 Or i = 32 Or i = 51 Or i = 66 Or i = 82 Then
                 kolumny(i, j) = data
             ElseIf i > 4 And i < 24 Then
@@ -332,6 +361,7 @@ Private Sub podsumowanieWWalutach()
             ElseIf i = 92 Then
                 kolumny(i, j) = "=detale!R195C" & k & "-'Podsumowanie w walutach'!R[-1]C"
             ElseIf i = 96 Then
+
                 kolumny(i, j) = "=R[-72]C+R[-49]C+R[-38]C+R[-22]C+R[-5]C"
             End If
         Next i
@@ -346,7 +376,9 @@ Private Sub podsumowanieWPLN()
     Dim i, j, k, m, dzien As Integer
     
     Dim kolumny As Variant
+
     ReDim kolumny(4 To 121, 1 To ileDnii)
+
     
     k = Sheets("detale").Range("F4").End(xlToRight).Column
     m = Sheets("Podsumowanie per bank").Range("D3").End(xlToRight).Column
@@ -356,6 +388,7 @@ Private Sub podsumowanieWPLN()
         dzien = j
         Call dataSub(dzien)
         For i = 4 To UBound(kolumny, 1)
+
             If i = 4 Or i = 32 Or i = 51 Or i = 66 Or i = 82 Then
                 kolumny(i, j) = data
             ElseIf i > 4 And i < 24 Then
@@ -415,6 +448,7 @@ Private Sub podsumowanieWPLN()
             ElseIf i = 119 Then
                 kolumny(i, j) = "=SUMIFS(detale!C" & k & ",detale!C4,'Podsumowanie w PLN'!R119C3)"
             ElseIf i = 121 Then
+
                 kolumny(i, j) = "=SUM(R[-21]C,R[-18]C,R[-16]C,R[-14]C,R[-12]C,R[-10]C,R[-8]C,R[-6]C,R[-4]C,R[-2]C)-R[-24]C+R[-20]C"
             End If
         Next i
@@ -464,7 +498,7 @@ Private Sub dlaBanku()
     ReDim kolumny(8 To 188, 1 To ileDnii)
     
     podWpln = Sheets("Podsumowanie w PLN").Range("c4").End(xlToRight).Column
-    dosKreZal = Sheets("dostêpny kredyt i zaleg³e p³").Range("f7").End(xlToRight).Column
+    dosKreZal = Sheets("dostÃªpny kredyt i zalegÂ³e pÂ³").Range("f7").End(xlToRight).Column
     det = Sheets("detale").Range("F4").End(xlToRight).Column
     For j = 1 To ileDnii
         kolDlaBanku = kolDlaBanku + 1
@@ -490,13 +524,14 @@ Private Sub dlaBanku()
             ElseIf i = 35 Then
                 kolumny(i, j) = "=SUM(R[1]C:R[4]C)"
             ElseIf i = 36 Then
-                kolumny(i, j) = "='dostêpny kredyt i zaleg³e p³'!R19C" & dosKreZal
+                kolumny(i, j) = "='dostÃªpny kredyt i zalegÂ³e pÂ³'!R19C" & dosKreZal
             ElseIf i = 37 Then
-                kolumny(i, j) = "='dostêpny kredyt i zaleg³e p³'!R22C" & dosKreZal
+                kolumny(i, j) = "='dostÃªpny kredyt i zalegÂ³e pÂ³'!R22C" & dosKreZal
             ElseIf i = 38 Then
-                kolumny(i, j) = "='dostêpny kredyt i zaleg³e p³'!R20C" & dosKreZal
+                kolumny(i, j) = "='dostÃªpny kredyt i zalegÂ³e pÂ³'!R20C" & dosKreZal
             ElseIf i = 39 Then
-                kolumny(i, j) = "='dostêpny kredyt i zaleg³e p³'!R21C" & dosKreZal
+                kolumny(i, j) = "='dostÃªpny kredyt i zalegÂ³e pÂ³'!R21C" & dosKreZal
+
             ElseIf i = 40 Then
                 kolumny(i, j) = "=R[-9]C-R[-5]C-R[-7]C+R[1]C-R[-6]C"
             ElseIf i = 43 Then
@@ -505,22 +540,26 @@ Private Sub dlaBanku()
                 kolumny(i, j) = "='Podsumowanie w PLN'!R79C" & podWpln & "-R[-13]C"
             ElseIf i = 49 Then
                 kolumny(i, j) = "=detale!R63C" & det & "+detale!R64C" & det
+
             ElseIf i = 50 Then
-                kolumny(i, j) = "='dostêpny kredyt i zaleg³e p³'!R8C" & dosKreZal
+                kolumny(i, j) = "='dostÃªpny kredyt i zalegÂ³e pÂ³'!R8C" & dosKreZal
             ElseIf i = 51 Then
-                kolumny(i, j) = "='dostêpny kredyt i zaleg³e p³'!R9C" & dosKreZal
+                kolumny(i, j) = "='dostÃªpny kredyt i zalegÂ³e pÂ³'!R9C" & dosKreZal
             ElseIf i = 53 Then
                 kolumny(i, j) = "=R49C" & kolDlaBanku & "-R50C" & kolDlaBanku & "=R32C" & kolDlaBanku & "-R31C" & kolDlaBanku
             ElseIf i > 67 And i < 90 Then
                 Select Case i
                     Case 84
+
                         kolumny(i, j) = "=SUMIFS('Podsumowanie w PLN'!R5C" & podWpln & ":R23C" & podWpln & ",'Podsumowanie w PLN'!R5C3:R23C3,'dla banku'!RC4)-R[-35]C"
                     Case Else
                         kolumny(i, j) = "=SUMIFS('Podsumowanie w PLN'!R5C" & podWpln & ":R23C" & podWpln & ",'Podsumowanie w PLN'!R5C3:R23C3,'dla banku'!RC4)"
+
                 End Select
             ElseIf i = 90 Then
                 kolumny(i, j) = "=SUM(R[-22]C:R[-1]C)"
             ElseIf i > 98 And i < 121 Then
+
                 kolumny(i, j) = "=SUMIFS('Podsumowanie w PLN'!R67C" & podWpln & ":R73C" & podWpln & ",'Podsumowanie w PLN'!R67C3:R73C3,'dla banku'!RC4)"
             ElseIf i = 121 Then
                 kolumny(i, j) = "=SUM(R[-22]C:R[-1]C)"
@@ -530,6 +569,7 @@ Private Sub dlaBanku()
                 kolumny(i, j) = "=SUM(R[-22]C:R[-1]C)"
             ElseIf i > 162 And i < 185 Then
                 kolumny(i, j) = "=SUMIFS('Podsumowanie w PLN'!R83C" & podWpln & ":R90C" & podWpln & ",'Podsumowanie w PLN'!R83C3:R90C3,'dla banku'!RC4)"
+
             ElseIf i = 185 Then
                 kolumny(i, j) = "=SUM(R[-22]C:R[-1]C)"
             ElseIf i = 188 Then

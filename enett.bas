@@ -4,7 +4,7 @@ Dim nazwaExcelaDocelowego As String
 Dim daneDoSortowania As Variant
 
 
-'wpisywanie porównania z ostatni¹ wartoœci¹
+'wpisywanie porÃ³wnania z ostatniÂ¹ wartoÅ“ciÂ¹
 
 Private Function znajdowanieWczorajszejDaty()
     Dim wczorajszaData As Date
@@ -124,7 +124,9 @@ End Sub
 
 Sub wklejenieDoEnetta()
     Dim wb As Workbook
+
     nazwaExcelaDocelowego = "eNett 05.2021.xlsb"
+
     
     On Error GoTo error_handler
     
@@ -141,10 +143,10 @@ Sub wklejenieDoEnetta()
     Exit Sub
 error_handler:
     If Err.Number = 1004 Then
-        MsgBox "SprawdŸ czy wszystkie pliki s¹ w trybie edycji i spróbuj ponownie." & vbCrLf _
-            & "Miej na uwadze, ¿e czêœæ kodu mog³a siê wykonaæ. Najlepiej w takim przypadku wyjdŸ z arkusza bez zapisywania"
+        MsgBox "SprawdÅ¸ czy wszystkie pliki sÂ¹ w trybie edycji i sprÃ³buj ponownie." & vbCrLf _
+            & "Miej na uwadze, Â¿e czÃªÅ“Ã¦ kodu mogÂ³a siÃª wykonaÃ¦. Najlepiej w takim przypadku wyjdÅ¸ z arkusza bez zapisywania"
     Else
-        MsgBox "Wyst¹pi³ b³¹d nr: " & Err.Number & " o opisie: " & Err.Description
+        MsgBox "WystÂ¹piÂ³ bÂ³Â¹d nr: " & Err.Number & " o opisie: " & Err.Description
     End If
     
     Call wlacz
